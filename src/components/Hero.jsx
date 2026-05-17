@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiDownload, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
+import { FiArrowRight, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
 import profilePic from '../assests/pic.jpeg';
+import { socials } from '../data/socials';
 
 const phrases = ['B.Tech CSE Graduate', 'Software Developer', 'Tech Enthusiast'];
 
@@ -11,11 +12,11 @@ const stats = [
   { value: '40+', label: 'Certificates' },
 ];
 
-const socials = [
-  { icon: <FiGithub size={18} />, href: 'https://github.com/InderX84' },
-  { icon: <FiLinkedin size={18} />, href: 'https://www.linkedin.com' },
-  { icon: <FiMail size={18} />, href: 'mailto:singhnarinder14720@gmail.com' },
-];
+const socialIcons = {
+  GitHub: <FiGithub size={18} />,
+  LinkedIn: <FiLinkedin size={18} />,
+  Email: <FiMail size={18} />,
+};
 
 export default function Hero() {
   const [text, setText] = useState('');
@@ -119,12 +120,6 @@ export default function Hero() {
             >
               View Projects <FiArrowRight />
             </a>
-            <a
-              href="/Narinder-Singh-Resume.pdf"
-              className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm text-slate-200 transition hover:border-sky-400/40 hover:text-sky-300"
-            >
-              <FiDownload /> Resume
-            </a>
           </motion.div>
 
           {/* socials */}
@@ -134,16 +129,16 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.75 }}
             className="mt-8 flex items-center gap-3"
           >
-            {socials.map((s, i) => (
+            {socials.map((s) => (
               <motion.a
-                key={i}
+                key={s.label}
                 href={s.href}
                 target={s.href.startsWith('mailto') ? undefined : '_blank'}
                 rel="noreferrer"
                 whileHover={{ y: -4, scale: 1.1 }}
                 className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-slate-400 transition hover:border-sky-400/40 hover:text-sky-300"
               >
-                {s.icon}
+                {socialIcons[s.label]}
               </motion.a>
             ))}
           </motion.div>
@@ -175,16 +170,6 @@ export default function Hero() {
                 <p className="mt-1 text-sm text-sky-300">Software Developer</p>
               </div>
             </div>
-
-            {/* floating badge — top right */}
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute -right-6 top-8 rounded-2xl border border-white/10 bg-slate-900/90 px-4 py-3 shadow-xl backdrop-blur-xl"
-            >
-              <p className="text-xs text-slate-400">CGPA</p>
-              <p className="text-xl font-bold text-slate-100">8.0 <span className="text-sm text-sky-400">/ 10</span></p>
-            </motion.div>
 
             {/* floating badge — bottom left */}
             <motion.div

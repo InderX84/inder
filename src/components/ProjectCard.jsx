@@ -1,41 +1,83 @@
 import { motion } from 'framer-motion';
-import { FiExternalLink, FiStar } from 'react-icons/fi';
+import { FiExternalLink, FiStar, FiGitBranch, FiGithub, FiGlobe } from 'react-icons/fi';
 import { formatDate } from '../utils/formatDate';
 
+const langColors = {
+  JavaScript: '#F7DF1E',
+  TypeScript: '#3178C6',
+  Python: '#3776AB',
+  Java: '#ED8B00',
+  'C++': '#00599C',
+  C: '#A8B9CC',
+  HTML: '#E34F26',
+  CSS: '#1572B6',
+};
+
 export default function ProjectCard({ repo, index = 0 }) {
+  const dot = langColors[repo.language] ?? '#94a3b8';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.55, delay: index * 0.08 }}
-      whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.2 } }}
-      className="glass-card flex flex-col justify-between rounded-[2rem] border-white/10 p-6 transition"
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.5, delay: index * 0.08 }}
+      whileHover={{ y: -6, transition: { duration: 0.2 } }}
+      className="glass-card flex flex-col justify-between rounded-[2rem] border-white/10 p-6 hover:border-sky-400/30 transition"
     >
+      {/* top */}
       <div>
-        <div className="mb-4 flex items-center justify-between">
-          <span className="rounded-2xl bg-slate-900/80 px-3 py-1 text-xs uppercase tracking-[0.24em] text-slate-300">{repo.language || 'Other'}</span>
-          <motion.span
-            whileHover={{ scale: 1.2 }}
-            className="inline-flex items-center gap-1 text-sm text-amber-300"
+        {/* language badge + stars + forks */}
+        <div className="flex items-center justify-between mb-4">
+          <span
+            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-slate-900/80 px-3 py-1 text-xs font-medium"
+            style={{ color: dot }}
           >
-            <FiStar /> {repo.stargazers_count}
-          </motion.span>
+            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: dot }} />
+            {repo.language || 'Other'}
+          </span>
+          <div className="flex items-center gap-3 text-xs text-slate-400">
+            <span className="flex items-center gap-1">
+              <FiStar size={13} className="text-amber-300" />
+              {repo.stargazers_count}
+            </span>
+            <span className="flex items-center gap-1">
+              <FiGitBranch size={13} />
+              {repo.forks_count}
+            </span>
+          </div>
         </div>
-        <h3 className="text-xl font-semibold text-slate-100">{repo.name}</h3>
-        <p className="mt-4 text-sm leading-6 text-slate-300">{repo.description || 'A polished project demonstrating modern frontend development and engineering focus.'}</p>
+
+        {/* name */}
+        <h3 className="text-lg font-semibold text-slate-100 leading-snug">{repo.name}</h3>
+
+        {/* description */}
+        <p className="mt-2 text-sm leading-6 text-slate-400 line-clamp-2">
+          {repo.description || 'No description provided.'}
+        </p>
       </div>
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400">
-        <span>Updated {formatDate(repo.updated_at)}</span>
-        <motion.a
-          href={repo.html_url}
-          target="_blank"
-          rel="noreferrer"
-          whileHover={{ x: 4 }}
-          className="inline-flex items-center gap-2 font-medium text-sky-300 hover:text-sky-200"
-        >
-          View repo <FiExternalLink />
-        </motion.a>
+
+      {/* bottom */}
+      <div className="mt-5">
+        <p className="mb-3 text-xs text-slate-500">Updated {formatDate(repo.updated_at)}</p>
+        <div className="flex gap-2">
+          <a
+            href={repo.html_url}
+            target="_blank"
+            rel="noreferrer"
+            className="flex flex-1 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 py-2.5 text-sm text-slate-300 transition hover:border-sky-400/40 hover:text-sky-300"
+          >
+            <FiGithub size={15} /> GitHub
+          </a>
+          <a
+            href={repo.homepage || repo.html_url}
+            target="_blank"
+            rel="noreferrer"
+            className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-500 to-cyan-400 py-2.5 text-sm font-semibold text-slate-950 shadow-md shadow-sky-400/20 transition hover:opacity-90"
+          >
+            <FiGlobe size={15} /> Live
+          </a>
+        </div>
       </div>
     </motion.div>
   );

@@ -1,51 +1,38 @@
 import { motion } from 'framer-motion';
 import SectionTitle from './SectionTitle';
-import { skillGroups } from '../data/skills';
-
-const container = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.08 } },
-};
-
-const item = {
-  hidden: { opacity: 0, x: -16 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.4 } },
-};
+import { pyramidRows } from '../data/skills';
 
 export default function SkillsSection() {
   return (
-    <section id="skills" className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+    <section id="skills" className="mx-auto max-w-4xl px-6 py-20 lg:px-8">
       <SectionTitle subtitle="Skills" title="Technical Proficiency" />
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-        {skillGroups.map((group, index) => (
+
+      <div className="flex flex-col items-center gap-4 mt-10">
+        {pyramidRows.map((row, rowIndex) => (
           <motion.div
-            key={group.category}
-            initial={{ opacity: 0, y: 32 }}
+            key={rowIndex}
+            className="flex justify-center gap-4 flex-wrap"
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, delay: index * 0.12 }}
-            whileHover={{ y: -4, transition: { duration: 0.2 } }}
-            className="glass-card rounded-[2rem] border-white/10 p-6"
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.5, delay: rowIndex * 0.1 }}
           >
-            <h3 className="text-xl font-semibold text-slate-100">{group.category}</h3>
-            <motion.div
-              variants={container}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              className="mt-5 space-y-3"
-            >
-              {group.items.map((skill) => (
+            {row.map((skill) => {
+              const Icon = skill.icon;
+              return (
                 <motion.div
-                  key={skill}
-                  variants={item}
-                  whileHover={{ x: 6, borderColor: 'rgba(125,211,252,0.5)', transition: { duration: 0.15 } }}
-                  className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-slate-200 cursor-default"
+                  key={skill.name}
+                  whileHover={{ y: -6, scale: 1.08 }}
+                  transition={{ duration: 0.2 }}
+                  className="glass-card flex flex-col items-center justify-center gap-2 rounded-2xl border border-white/10 px-5 py-4 w-24 cursor-default"
                 >
-                  {skill}
+                  <Icon size={36} color={skill.color} />
+                  <span className="text-xs font-medium text-slate-300 text-center leading-tight">
+                    {skill.name}
+                  </span>
                 </motion.div>
-              ))}
-            </motion.div>
+              );
+            })}
           </motion.div>
         ))}
       </div>

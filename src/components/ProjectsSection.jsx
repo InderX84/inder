@@ -96,18 +96,18 @@ export default function ProjectsSection() {
         </div>
       </div>
 
-      <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
         {loading && Array.from({ length: PAGE_SIZE }).map((_, idx) => <SkeletonCard key={idx} />)}
         {!loading && error && (
-          <div className="glass-card rounded-[2rem] border border-red-500/20 bg-red-500/5 p-8 text-slate-200">
+          <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-8 text-slate-200">
             <p className="font-medium text-red-200">{error}</p>
             <p className="mt-2 text-sm text-slate-400">The username is configured in <span className="font-mono text-slate-100">src/services/githubService.js</span>.</p>
           </div>
         )}
         {!loading && !error && filteredRepos.length === 0 && (
-          <div className="glass-card rounded-[2rem] border-white/10 p-8 text-slate-300">No projects matched your current search or filters.</div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-8 text-slate-300">No projects matched your current search or filters.</div>
         )}
-        {!loading && !error && pageRepos.map((repo) => <ProjectCard key={repo.id} repo={repo} />)}
+        {!loading && !error && pageRepos.map((repo, i) => <ProjectCard key={repo.id} repo={repo} index={i} />)}
       </div>
 
       {!loading && !error && filteredRepos.length > PAGE_SIZE && (

@@ -1,5 +1,12 @@
 import { motion } from 'framer-motion';
 import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
+import { socials } from '../data/socials';
+
+const socialIcons = {
+  Email: <FiMail />,
+  LinkedIn: <FiLinkedin />,
+  GitHub: <FiGithub />,
+};
 
 export default function Footer() {
   return (
@@ -13,11 +20,7 @@ export default function Footer() {
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 text-slate-400 sm:flex-row sm:items-center sm:justify-between lg:px-8">
         <p>Designed & Developed by Narinder Singh</p>
         <div className="flex flex-wrap items-center gap-4 text-slate-300">
-          {[
-            { href: 'mailto:singhnarinder14720@gmail.com', icon: <FiMail />, label: 'Email' },
-            { href: 'https://www.linkedin.com', icon: <FiLinkedin />, label: 'LinkedIn' },
-            { href: 'https://github.com/InderX84', icon: <FiGithub />, label: 'GitHub' },
-          ].map((link) => (
+          {socials.map((link) => (
             <motion.a
               key={link.label}
               href={link.href}
@@ -26,7 +29,7 @@ export default function Footer() {
               whileHover={{ y: -3, color: '#7dd3fc' }}
               className="inline-flex items-center gap-2"
             >
-              {link.icon} {link.label}
+              {socialIcons[link.label]} {link.label}
             </motion.a>
           ))}
         </div>

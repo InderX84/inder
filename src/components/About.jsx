@@ -1,111 +1,150 @@
-import { motion } from 'framer-motion';
-import { FiCode, FiCpu, FiLayers, FiUser } from 'react-icons/fi';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiCode, FiCpu, FiLayers, FiUsers, FiMapPin, FiBookOpen, FiAward, FiX, FiDownload } from 'react-icons/fi';
 import SectionTitle from './SectionTitle';
-import profilePic from '../assests/pic.jpeg';
+import resume from '../assests/Narinder_Singh.pdf';
 
 const highlights = [
-  { icon: <FiCode size={20} />, label: 'Frontend Dev', desc: 'React, HTML, CSS, JS' },
-  { icon: <FiCpu size={20} />, label: 'Programming', desc: 'C++, Java, Python' },
-  { icon: <FiLayers size={20} />, label: 'Tools', desc: 'Git, GitHub, SQL' },
-  { icon: <FiUser size={20} />, label: 'Soft Skills', desc: 'Problem Solving, Teamwork' },
+  { icon: FiCode,   label: 'Frontend Dev',  desc: 'React, HTML, CSS, JS'    },
+  { icon: FiCpu,    label: 'Programming',   desc: 'C++, Java, Python, C'     },
+  { icon: FiLayers, label: 'Tools',         desc: 'Git, GitHub, SQL, MongoDB' },
+  { icon: FiUsers,  label: 'Soft Skills',   desc: 'Problem Solving, Teamwork' },
 ];
 
+const education = [
+  {
+    icon: FiBookOpen,
+    degree: 'B.Tech — CSE',
+    school: 'Chitkara University',
+    year: '2022 – 2026',
+    grade: 'CGPA 8.0',
+    color: 'text-sky-400',
+    border: 'border-sky-400/40',
+    bg: 'bg-sky-400/10',
+  },
+  {
+    icon: FiAward,
+    degree: '+2 Non-Medical',
+    school: 'GSSS Mohinder Ganj Rajpura',
+    year: 'School of Eminence',
+    grade: '77%',
+    color: 'text-fuchsia-400',
+    border: 'border-fuchsia-400/40',
+    bg: 'bg-fuchsia-400/10',
+  },
+  {
+    icon: FiMapPin,
+    degree: '10th',
+    school: 'Govt. High School Upalheri',
+    year: '',
+    grade: '90%',
+    color: 'text-emerald-400',
+    border: 'border-emerald-400/40',
+    bg: 'bg-emerald-400/10',
+  },
+];
+
+function ResumeModal({ onClose }) {
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ scale: 0.92, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.92, opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="relative w-full max-w-4xl rounded-[2rem] border border-white/10 bg-slate-900 shadow-2xl overflow-hidden"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+            <p className="font-medium text-slate-100">Narinder Singh — Resume</p>
+            <div className="flex items-center gap-3">
+              <a
+                href={resume}
+                download
+                className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300 hover:text-sky-300"
+              >
+                <FiDownload size={14} /> Download
+              </a>
+              <button
+                onClick={onClose}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 hover:text-sky-300"
+              >
+                <FiX />
+              </button>
+            </div>
+          </div>
+          <div style={{ height: 'calc(100vh - 160px)' }}>
+            <iframe
+              src={`${resume}#toolbar=0&navpanes=0&scrollbar=0&view=Fit`}
+              title="Resume"
+              className="w-full h-full border-0"
+            />
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 export default function About() {
+  const [showResume, setShowResume] = useState(false);
   return (
     <section id="about" className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
       <SectionTitle subtitle="About" title="Who I Am" />
 
-      <div className="grid gap-12 lg:grid-cols-[1fr,1.4fr] lg:items-center">
+      <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:items-start">
 
-        {/* left — image + floating card */}
+        {/* LEFT — bio + highlight cards */}
         <motion.div
-          initial={{ opacity: 0, x: -32 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto w-full max-w-sm lg:mx-0"
-        >
-          {/* glow */}
-          <div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-to-br from-sky-400/20 via-fuchsia-500/10 to-cyan-400/10 blur-2xl" />
-
-          {/* photo */}
-          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
-            <img
-              src={profilePic}
-              alt="Narinder Singh"
-              className="h-[420px] w-full object-cover object-top"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent" />
-          </div>
-
-          {/* floating experience card */}
-          <motion.div
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute -right-6 -bottom-6 rounded-2xl border border-white/10 bg-slate-900/90 px-5 py-4 shadow-xl backdrop-blur-xl"
-          >
-            <p className="text-xs uppercase tracking-widest text-slate-500">Graduated</p>
-            <p className="mt-1 text-lg font-bold text-slate-100">2024 <span className="text-sm font-normal text-sky-400">B.Tech CSE</span></p>
-          </motion.div>
-
-          {/* floating cgpa card */}
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-            className="absolute -left-6 top-8 rounded-2xl border border-white/10 bg-slate-900/90 px-5 py-4 shadow-xl backdrop-blur-xl"
-          >
-            <p className="text-xs uppercase tracking-widest text-slate-500">CGPA</p>
-            <p className="mt-1 text-lg font-bold text-slate-100">8.0 <span className="text-sm font-normal text-fuchsia-400">/ 10</span></p>
-          </motion.div>
-        </motion.div>
-
-        {/* right — text content */}
-        <motion.div
-          initial={{ opacity: 0, x: 32 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7 }}
           className="space-y-6"
         >
           <p className="text-lg leading-8 text-slate-300">
-            I'm <span className="font-semibold text-slate-100">Narinder Singh</span>, a B.Tech Computer Science Engineering graduate from{' '}
-            <span className="text-sky-300">Chitkara University</span> with a CGPA of 8.0. I have a strong passion for software development, problem-solving, and emerging technologies.
-          </p>
-          <p className="leading-8 text-slate-400">
-            I completed my 10th from Government High School Upalheri with <span className="text-slate-200">90%</span>, and my +2 Non-Medical from Government Senior Secondary School Mohinder Ganj Rajpura (School of Eminence) with <span className="text-slate-200">77%</span>. I continuously focus on improving my technical skills and building practical projects.
+            I'm a final-year B.Tech CSE student at{' '}
+            <span className="text-sky-300">Chitkara University</span>, focused on full-stack development, machine learning, and building real-world projects that solve meaningful problems.
           </p>
 
           {/* highlight grid */}
-          <div className="grid grid-cols-2 gap-4 pt-2">
-            {highlights.map((item, i) => (
+          <div className="grid grid-cols-2 gap-3 pt-2">
+            {highlights.map(({ icon: Icon, label, desc }, i) => (
               <motion.div
-                key={item.label}
+                key={label}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
+                transition={{ duration: 0.45, delay: i * 0.08 }}
                 whileHover={{ scale: 1.03 }}
                 className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4"
               >
                 <div className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-sky-400/10 text-sky-300">
-                  {item.icon}
+                  <Icon size={18} />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-slate-100">{item.label}</p>
-                  <p className="mt-0.5 text-xs text-slate-500">{item.desc}</p>
+                  <p className="text-sm font-semibold text-slate-100">{label}</p>
+                  <p className="mt-0.5 text-xs text-slate-500">{desc}</p>
                 </div>
               </motion.div>
             ))}
           </div>
 
           {/* cta */}
-          <div className="flex flex-wrap gap-4 pt-2">
-            <a
-              href="/Narinder-Singh-Resume.pdf"
+          <div className="flex flex-wrap gap-3 pt-2">
+            <button
+              onClick={() => setShowResume(true)}
               className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-sky-400 to-cyan-400 px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-sky-400/20 transition hover:-translate-y-0.5"
             >
-              Download Resume
-            </a>
+              View Resume
+            </button>
             <a
               href="#contact"
               className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm text-slate-200 transition hover:border-sky-400/40 hover:text-sky-300"
@@ -115,7 +154,55 @@ export default function About() {
           </div>
         </motion.div>
 
+        {/* RIGHT — education timeline + stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="space-y-6"
+        >
+          {/* education timeline */}
+          <div className="relative space-y-4 pl-4">
+            {/* vertical line */}
+            <div className="absolute left-0 top-2 h-[calc(100%-1rem)] w-px bg-white/10" />
+
+            {education.map(({ icon: Icon, degree, school, year, grade, color, border, bg }, i) => (
+              <motion.div
+                key={degree}
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: i * 0.1 }}
+                className={`relative rounded-2xl border ${border} ${bg} p-5`}
+              >
+                {/* dot on timeline */}
+                <span className={`absolute -left-[1.35rem] top-5 flex h-4 w-4 items-center justify-center rounded-full border-2 ${border} bg-slate-950`}>
+                  <span className={`h-1.5 w-1.5 rounded-full ${color.replace('text-', 'bg-')}`} />
+                </span>
+
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl ${bg} ${color}`}>
+                      <Icon size={17} />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-slate-100">{degree}</p>
+                      <p className="text-xs text-slate-400">{school}</p>
+                      {year && <p className="text-xs text-slate-500">{year}</p>}
+                    </div>
+                  </div>
+                  <span className={`flex-shrink-0 rounded-xl border ${border} px-3 py-1 text-sm font-bold ${color}`}>
+                    {grade}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
       </div>
+      {showResume && <ResumeModal onClose={() => setShowResume(false)} />}
     </section>
   );
 }
