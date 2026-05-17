@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
+import { FiArrowRight, FiGithub, FiLinkedin, FiMail, FiInstagram } from 'react-icons/fi';
 import profilePic from '../assests/pic.jpeg';
 import { socials } from '../data/socials';
 
@@ -16,6 +16,7 @@ const socialIcons = {
   GitHub: <FiGithub size={18} />,
   LinkedIn: <FiLinkedin size={18} />,
   Email: <FiMail size={18} />,
+  Instagram: <FiInstagram size={18} />,
 };
 
 export default function Hero() {
@@ -161,6 +162,7 @@ export default function Hero() {
               <img
                 src={profilePic}
                 alt="Narinder Singh"
+                loading="lazy"
                 className="h-full w-full object-cover object-top"
               />
 

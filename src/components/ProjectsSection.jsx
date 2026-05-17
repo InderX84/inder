@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
+import { FiGithub, FiStar, FiGitBranch, FiGlobe } from 'react-icons/fi';
 import SectionTitle from './SectionTitle';
 import ProjectCard from './ProjectCard';
 import SkeletonCard from './SkeletonCard';
 import { useGithubRepos } from '../hooks/useGithubRepos';
+import { formatDate } from '../utils/formatDate';
 
 const sortOptions = [
   { value: 'updated', label: 'Latest update' },
@@ -13,12 +15,58 @@ const sortOptions = [
 
 const PAGE_SIZE = 6;
 
+function FeaturedRepo({ repo }) {
+  if (!repo) return null;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="mb-8 glass-card rounded-[2rem] border-sky-400/20 p-6"
+    >
+      <div className="flex items-center gap-2 mb-3">
+        <FiStar size={15} className="text-amber-300" />
+        <span className="text-xs uppercase tracking-widest text-amber-300">Most Starred</span>
+      </div>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <h3 className="text-xl font-bold text-slate-100">{repo.name}</h3>
+          <p className="mt-1 text-sm text-slate-400">{repo.description || 'No description provided.'}</p>
+          <div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-400">
+            <span className="flex items-center gap-1"><FiStar size={12} className="text-amber-300" />{repo.stargazers_count} stars</span>
+            <span className="flex items-center gap-1"><FiGitBranch size={12} />{repo.forks_count} forks</span>
+            <span>Updated {formatDate(repo.updated_at)}</span>
+          </div>
+        </div>
+        <div className="flex gap-2 flex-shrink-0">
+          <a href={repo.html_url} target="_blank" rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300 hover:text-sky-300 transition">
+            <FiGithub size={14} /> Repo
+          </a>
+          {repo.homepage && (
+            <a href={repo.homepage} target="_blank" rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-sky-500 to-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 hover:opacity-90 transition">
+              <FiGlobe size={14} /> Live
+            </a>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function ProjectsSection() {
   const { repos, loading, error } = useGithubRepos();
   const [search, setSearch] = useState('');
   const [language, setLanguage] = useState('All');
   const [sort, setSort] = useState('updated');
   const [currentPage, setCurrentPage] = useState(1);
+
+  const mostStarred = useMemo(() => {
+    if (!repos.length) return null;
+    return [...repos].sort((a, b) => b.stargazers_count - a.stargazers_count)[0];
+  }, [repos]);
 
   const languageOptions = useMemo(() => {
     const languages = repos.map((repo) => repo.language).filter(Boolean);
@@ -60,6 +108,7 @@ export default function ProjectsSection() {
   return (
     <section id="projects" className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
       <SectionTitle subtitle="Projects" title="Explore my GitHub work" />
+      <FeaturedRepo repo={mostStarred} />
       <div className="glass-card rounded-[2rem] border-white/10 p-6 shadow-xl">
         <div className="grid gap-4 lg:grid-cols-[1.5fr,1fr]">
           <input
@@ -138,6 +187,18 @@ export default function ProjectsSection() {
           >
             Next
           </button>
+        </div>
+      )}
+      {!loading && !error && (
+        <div className="mt-8 text-center">
+          <a
+            href="https://github.com/InderX84"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm text-slate-300 transition hover:border-sky-400/40 hover:text-sky-300"
+          >
+            <FiGithub size={16} /> View all on GitHub
+          </a>
         </div>
       )}
     </section>

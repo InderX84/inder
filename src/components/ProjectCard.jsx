@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FiExternalLink, FiStar, FiGitBranch, FiGithub, FiGlobe } from 'react-icons/fi';
+import { FiStar, FiGitBranch, FiGithub, FiGlobe } from 'react-icons/fi';
 import { formatDate } from '../utils/formatDate';
 
 const langColors = {
@@ -55,6 +55,20 @@ export default function ProjectCard({ repo, index = 0 }) {
         <p className="mt-2 text-sm leading-6 text-slate-400 line-clamp-2">
           {repo.description || 'No description provided.'}
         </p>
+
+        {/* topics */}
+        {repo.topics?.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {repo.topics.slice(0, 4).map((topic) => (
+              <span
+                key={topic}
+                className="rounded-full border border-sky-400/20 bg-sky-400/10 px-2.5 py-0.5 text-xs text-sky-300"
+              >
+                {topic}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* bottom */}
@@ -69,14 +83,16 @@ export default function ProjectCard({ repo, index = 0 }) {
           >
             <FiGithub size={15} /> GitHub
           </a>
-          <a
-            href={repo.homepage || repo.html_url}
-            target="_blank"
-            rel="noreferrer"
-            className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-500 to-cyan-400 py-2.5 text-sm font-semibold text-slate-950 shadow-md shadow-sky-400/20 transition hover:opacity-90"
-          >
-            <FiGlobe size={15} /> Live
-          </a>
+          {repo.homepage && (
+            <a
+              href={repo.homepage}
+              target="_blank"
+              rel="noreferrer"
+              className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-500 to-cyan-400 py-2.5 text-sm font-semibold text-slate-950 shadow-md shadow-sky-400/20 transition hover:opacity-90"
+            >
+              <FiGlobe size={15} /> Live
+            </a>
+          )}
         </div>
       </div>
     </motion.div>
