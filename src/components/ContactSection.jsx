@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
-import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
+import { FiMail } from 'react-icons/fi';
 import SectionTitle from './SectionTitle';
 
 export default function ContactSection() {
   return (
     <section id="contact" className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
-      <SectionTitle subtitle="Contact" title="Let&apos;s build something together" />
+      <SectionTitle subtitle="Contact" title="Let's build something together" />
       <div className="grid gap-8 lg:grid-cols-[0.95fr,1.05fr]">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -15,11 +15,11 @@ export default function ContactSection() {
           className="glass-card rounded-[2rem] border-white/10 p-8"
         >
           <h3 className="text-xl font-semibold text-slate-100">Contact me</h3>
-          <p className="mt-4 text-slate-300">I&apos;m available for internships, entry-level opportunities, and collaborative software projects. Let&apos;s connect and bring thoughtful products to life.</p>
+          <p className="mt-4 text-slate-300">I'm available for internships, entry-level opportunities, and collaborative software projects. Let's connect and bring thoughtful products to life.</p>
           <div className="mt-8 space-y-4 text-slate-400">
             <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4">
               <p className="text-sm uppercase tracking-[0.24em] text-slate-500">Email</p>
-              <p className="mt-2 text-slate-200">narinder@example.com</p>
+              <a href="mailto:singhnarinder14720@gmail.com" className="mt-2 inline-block text-slate-200 hover:text-sky-300">singhnarinder14720@gmail.com</a>
             </div>
             <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4">
               <p className="text-sm uppercase tracking-[0.24em] text-slate-500">LinkedIn</p>
@@ -60,7 +60,7 @@ export default function ContactSection() {
       </div>
       <div className="mt-8 flex items-center gap-4 text-slate-400">
         <FiMail />
-        <span>narinder@example.com</span>
+        <span>singhnarinder14720@gmail.com</span>
       </div>
     </section>
   );
