@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { FiArrowRight, FiGithub, FiLinkedin, FiMail, FiInstagram } from 'react-icons/fi';
-import profilePic from '../assests/pic.jpeg';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiArrowRight, FiGithub, FiLinkedin, FiMail, FiInstagram, FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import profilePic from '../assests/pic.png';
+import profilePic2 from '../assests/pic2.png';
+import profilePic3 from '../assests/pic3.png';
 import { socials } from '../data/socials';
 
 const phrases = ['B.Tech CSE Graduate', 'Software Developer', 'Tech Enthusiast'];
@@ -10,6 +12,12 @@ const stats = [
   { value: '8.0', label: 'CGPA' },
   { value: '10+', label: 'Projects' },
   { value: '40+', label: 'Certificates' },
+];
+
+const slides = [
+  { src: profilePic,  position: 'object-top',    label: 'Software Developer' },
+  { src: profilePic2, position: 'object-top',    label: 'B.Tech CSE Graduate' },
+  { src: profilePic3, position: 'object-top',    label: 'Tech Enthusiast' },
 ];
 
 const socialIcons = {
@@ -23,6 +31,18 @@ export default function Hero() {
   const [text, setText] = useState('');
   const [index, setIndex] = useState(0);
   const [forward, setForward] = useState(true);
+  const [slide, setSlide] = useState(0);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalSlide, setModalSlide] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setSlide((s) => (s + 1) % slides.length), 3500);
+    return () => clearInterval(id);
+  }, []);
+
+  const openModal = () => { setModalSlide(slide); setModalOpen(true); };
+  const prevModal = () => setModalSlide((s) => (s - 1 + slides.length) % slides.length);
+  const nextModal = () => setModalSlide((s) => (s + 1) % slides.length);
 
   useEffect(() => {
     const current = phrases[index];
@@ -158,26 +178,60 @@ export default function Hero() {
             <div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-to-br from-sky-400/30 via-fuchsia-500/20 to-cyan-400/20 blur-2xl" />
 
             {/* card */}
-            <div className="relative h-[420px] w-[340px] overflow-hidden rounded-[2.5rem] border border-white/10 bg-slate-900/80 shadow-2xl sm:h-[480px] sm:w-[380px]">
-              <img
-                src={profilePic}
-                alt="Narinder Singh"
-                loading="lazy"
-                className="h-full w-full object-cover object-top"
-              />
+            <div
+              className="relative h-[420px] w-[340px] overflow-hidden rounded-[2.5rem] border border-white/10 bg-slate-900/80 shadow-2xl sm:h-[480px] sm:w-[380px] cursor-zoom-in"
+              onClick={openModal}
+            >
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={slide}
+                  src={slides[slide].src}
+                  alt="Narinder Singh"
+                  loading="lazy"
+                  initial={{ opacity: 0, scale: 1.06 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.96 }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  className={`h-full w-full object-cover ${slides[slide].position}`}
+                />
+              </AnimatePresence>
 
               {/* bottom info strip */}
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/95 via-slate-950/60 to-transparent px-6 pb-6 pt-16">
                 <p className="text-lg font-semibold text-slate-100">Narinder Singh</p>
-                <p className="mt-1 text-sm text-sky-300">Software Developer</p>
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={slide}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.4 }}
+                    className="mt-1 text-sm text-sky-300"
+                  >
+                    {slides[slide].label}
+                  </motion.p>
+                </AnimatePresence>
+              </div>
+
+              {/* dot indicators */}
+              <div className="absolute bottom-4 right-4 flex gap-1.5">
+                {slides.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSlide(i)}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      i === slide ? 'w-5 bg-sky-400' : 'w-1.5 bg-white/30'
+                    }`}
+                  />
+                ))}
               </div>
             </div>
 
-            {/* floating badge — bottom left */}
+            {/* floating badge — bottom center */}
             <motion.div
               animate={{ y: [0, 8, 0] }}
               transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-              className="absolute -left-6 bottom-16 rounded-2xl border border-white/10 bg-slate-900/90 px-4 py-3 shadow-xl backdrop-blur-xl"
+              className="mx-auto mt-4 w-fit rounded-2xl border border-white/10 bg-slate-900/90 px-4 py-3 shadow-xl backdrop-blur-xl text-center"
             >
               <p className="text-xs text-slate-400">Certificates</p>
               <p className="text-xl font-bold text-slate-100">40<span className="text-sm text-fuchsia-400">+</span></p>
@@ -187,6 +241,64 @@ export default function Hero() {
         </motion.div>
 
       </div>
+
+      {/* image modal */}
+      <AnimatePresence>
+        {modalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-sm p-4"
+            onClick={() => setModalOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="relative max-h-[90vh] max-w-lg w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={modalSlide}
+                  src={slides[modalSlide].src}
+                  alt={slides[modalSlide].label}
+                  initial={{ opacity: 0, scale: 1.04 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.97 }}
+                  transition={{ duration: 0.35 }}
+                  className="w-full max-h-[80vh] object-contain rounded-[2rem] shadow-2xl"
+                />
+              </AnimatePresence>
+
+              {/* label */}
+              <p className="mt-3 text-center text-sm text-sky-300">{slides[modalSlide].label}</p>
+
+              {/* prev / next */}
+              <button onClick={prevModal} className="absolute left-2 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-slate-900/80 text-slate-200 hover:text-sky-300 backdrop-blur">
+                <FiChevronLeft size={20} />
+              </button>
+              <button onClick={nextModal} className="absolute right-2 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-slate-900/80 text-slate-200 hover:text-sky-300 backdrop-blur">
+                <FiChevronRight size={20} />
+              </button>
+
+              {/* close */}
+              <button onClick={() => setModalOpen(false)} className="absolute -top-4 -right-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-slate-900 text-slate-300 hover:text-sky-300">
+                <FiX size={16} />
+              </button>
+
+              {/* dots */}
+              <div className="mt-3 flex justify-center gap-2">
+                {slides.map((_, i) => (
+                  <button key={i} onClick={() => setModalSlide(i)} className={`h-1.5 rounded-full transition-all duration-300 ${i === modalSlide ? 'w-5 bg-sky-400' : 'w-1.5 bg-white/30'}`} />
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* scroll indicator */}
       <motion.div
