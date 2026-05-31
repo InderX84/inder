@@ -3,4 +3,5 @@ export const socials = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/inderx84/' },
   { label: 'GitHub', href: 'https://github.com/InderX84' },
   { label: 'Instagram', href: 'https://www.instagram.com/inderx84/' },
+  { label: 'Snapchat', href: 'https://www.snapchat.com/add/iam_inder84' },
 ];

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiGithub, FiLinkedin, FiMail, FiInstagram, FiEye } from 'react-icons/fi';
+import { FaSnapchatGhost } from 'react-icons/fa';
 import { socials } from '../data/socials';
 
 const socialIcons = {
@@ -8,6 +9,7 @@ const socialIcons = {
   LinkedIn: <FiLinkedin />,
   GitHub: <FiGithub />,
   Instagram: <FiInstagram />,
+  Snapchat: <FaSnapchatGhost />,
 };
 
 function useVisitorCount() {

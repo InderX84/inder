@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiArrowRight, FiGithub, FiLinkedin, FiMail, FiInstagram, FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FaSnapchatGhost } from 'react-icons/fa';
 import profilePic from '../assests/pic.png';
 import profilePic2 from '../assests/pic2.png';
 import profilePic3 from '../assests/pic3.png';
@@ -25,12 +26,35 @@ const socialIcons = {
   LinkedIn: <FiLinkedin size={18} />,
   Email: <FiMail size={18} />,
   Instagram: <FiInstagram size={18} />,
+  Snapchat: <FaSnapchatGhost size={18} />,
 };
 
 export default function Hero() {
   const [text, setText] = useState('');
-  const [index, setIndex] = useState(0);
-  const [forward, setForward] = useState(true);
+  const typeRef = useRef({ index: 0, forward: true });
+
+  useEffect(() => {
+    let timeout;
+    const tick = () => {
+      const { index, forward } = typeRef.current;
+      const current = phrases[index];
+      setText((value) => {
+        const next = forward
+          ? current.slice(0, value.length + 1)
+          : current.slice(0, value.length - 1);
+        if (!forward && next.length === 0) {
+          typeRef.current = { index: (index + 1) % phrases.length, forward: true };
+        } else if (forward && next.length === current.length) {
+          typeRef.current = { index, forward: false };
+        }
+        return next;
+      });
+      timeout = setTimeout(tick, typeRef.current.forward ? 90 : 40);
+    };
+    timeout = setTimeout(tick, 90);
+    return () => clearTimeout(timeout);
+  }, []);
+
   const [slide, setSlide] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalSlide, setModalSlide] = useState(0);
@@ -40,24 +64,9 @@ export default function Hero() {
     return () => clearInterval(id);
   }, []);
 
-  const openModal = () => { setModalSlide(slide); setModalOpen(true); };
-  const prevModal = () => setModalSlide((s) => (s - 1 + slides.length) % slides.length);
-  const nextModal = () => setModalSlide((s) => (s + 1) % slides.length);
-
-  useEffect(() => {
-    const current = phrases[index];
-    const timeout = setTimeout(() => {
-      setText((value) => {
-        const next = forward
-          ? current.slice(0, value.length + 1)
-          : current.slice(0, value.length - 1);
-        if (!forward && next.length === 0) { setIndex((i) => (i + 1) % phrases.length); setForward(true); }
-        if (forward && next.length === current.length) setForward(false);
-        return next;
-      });
-    }, forward ? 90 : 40);
-    return () => clearTimeout(timeout);
-  }, [text, forward, index]);
+  const openModal = useCallback(() => { setModalSlide(slide); setModalOpen(true); }, [slide]);
+  const prevModal = useCallback(() => setModalSlide((s) => (s - 1 + slides.length) % slides.length), []);
+  const nextModal = useCallback(() => setModalSlide((s) => (s + 1) % slides.length), []);
 
   return (
     <section id="home" className="relative min-h-screen mx-auto max-w-7xl px-6 lg:px-8 flex items-center">
@@ -188,10 +197,11 @@ export default function Hero() {
                   src={slides[slide].src}
                   alt="Narinder Singh"
                   loading="lazy"
-                  initial={{ opacity: 0, scale: 1.06 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.96 }}
-                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  style={{ willChange: 'opacity', transform: 'translateZ(0)' }}
                   className={`h-full w-full object-cover ${slides[slide].position}`}
                 />
               </AnimatePresence>
@@ -231,6 +241,7 @@ export default function Hero() {
             <motion.div
               animate={{ y: [0, 8, 0] }}
               transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+              style={{ willChange: 'transform' }}
               className="mx-auto mt-4 w-fit rounded-2xl border border-white/10 bg-slate-900/90 px-4 py-3 shadow-xl backdrop-blur-xl text-center"
             >
               <p className="text-xs text-slate-400">Certificates</p>
@@ -265,10 +276,11 @@ export default function Hero() {
                   key={modalSlide}
                   src={slides[modalSlide].src}
                   alt={slides[modalSlide].label}
-                  initial={{ opacity: 0, scale: 1.04 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.97 }}
-                  transition={{ duration: 0.35 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  style={{ willChange: 'opacity' }}
                   className="w-full max-h-[80vh] object-contain rounded-[2rem] shadow-2xl"
                 />
               </AnimatePresence>

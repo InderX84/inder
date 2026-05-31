@@ -47,7 +47,7 @@
   }
 }
 
-/* floating orbs */
+/* floating orbs — disabled on mobile for performance */
 .orb {
   position: fixed;
   border-radius: 9999px;
@@ -55,6 +55,17 @@
   pointer-events: none;
   z-index: 0;
   animation: orbFloat 12s ease-in-out infinite;
+}
+
+@media (max-width: 768px) {
+  .orb { display: none; }
+
+  body::before { display: none; }
+
+  .glass-card {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
 }
 
 .orb-1 {
@@ -94,4 +105,6 @@
   75%       { transform: translateY(20px) translateX(10px); }
 }
 
-
+@media (prefers-reduced-motion: reduce) {
+  .orb { animation: none; }
+}
