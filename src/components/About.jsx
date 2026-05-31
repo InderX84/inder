@@ -13,11 +13,21 @@ const highlights = [
 
 const education = [
   {
+    icon: FiAward,
+    degree: 'M.E. — Computer Science',
+    school: 'Pursuing',
+    year: 'Research Assistant',
+    grade: 'Upcoming',
+    color: 'text-cyan-400',
+    border: 'border-cyan-400/40',
+    bg: 'bg-cyan-400/10',
+  },
+  {
     icon: FiBookOpen,
-    degree: 'B.Tech — CSE',
+    degree: 'B.E. — CSE',
     school: 'Chitkara University',
     year: '2022 – 2026',
-    grade: 'CGPA 8.0',
+    grade: 'CGPA 7.62',
     color: 'text-sky-400',
     border: 'border-sky-400/40',
     bg: 'bg-sky-400/10',

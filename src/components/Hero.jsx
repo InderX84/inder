@@ -10,7 +10,7 @@ import { socials } from '../data/socials';
 const phrases = ['B.Tech CSE Graduate', 'Software Developer', 'Tech Enthusiast'];
 
 const stats = [
-  { value: '8.0', label: 'CGPA' },
+  { value: '7.62', label: 'CGPA' },
   { value: '10+', label: 'Projects' },
   { value: '40+', label: 'Certificates' },
 ];
